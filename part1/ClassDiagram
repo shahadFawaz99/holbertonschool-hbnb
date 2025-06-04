@@ -1,0 +1,57 @@
+classDiagram
+
+%% User
+class UserService {
+  +register(): void
+  +update(): void
+  +delete(): void
+  -user_id: int
+  -first_name: string
+  -last_name: string
+  -email: string
+  -password: string
+}
+
+%% Place
+class PlaceService {
+  +create(): void
+  +update(): void
+  +delete(): void
+  +list(): void
+  -place_id: int
+  -title: string
+  -description: string
+  -price: float
+  -latitude: float
+  -longitude: float
+  -user_id: int
+}
+
+%% Review
+class ReviewService {
+  +create(): void
+  +update(): void
+  +delete(): void
+  +list_by_place(): void
+  -review_id: int
+  -rating: int
+  -comment: string
+  -user_id: int
+  -place_id: int
+}
+
+%% Amenity
+class AmenityService {
+  +create(): void
+  +update(): void
+  +delete(): void
+  +list(): void
+  -amenity_id: int
+  -name: string
+  -description: string
+}
+
+UserService "1" --> "many" PlaceService : owns
+UserService "1" --> "many" ReviewService : writes
+PlaceService "1" --> "many" ReviewService : has
+PlaceService "many" <--> "many" AmenityService : includes
