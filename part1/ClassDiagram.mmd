@@ -1,57 +1,56 @@
 classDiagram
+%% BaseModel
+class BaseModel {
+  -id: UUID
+  -created_at: datetime
+  -updated_at: datetime
+  +save(): void
+  +update(data: dict): void
+}
 
 %% User
-class UserService {
-  +register(): void
-  +update(): void
-  +delete(): void
-  -user_id: int
+class User {
   -first_name: string
   -last_name: string
   -email: string
-  -password: string
+  -is_admin: bool
 }
 
 %% Place
-class PlaceService {
-  +create(): void
-  +update(): void
-  +delete(): void
-  +list(): void
-  -place_id: int
+class Place {
   -title: string
   -description: string
   -price: float
   -latitude: float
   -longitude: float
-  -user_id: int
+  -owner: User
+  -amenities: list[Amenity]
+  -reviews: list[Review]
+  +add_amenity(amenity: Amenity): void
+  +add_review(review: Review): void
 }
 
 %% Review
-class ReviewService {
-  +create(): void
-  +update(): void
-  +delete(): void
-  +list_by_place(): void
-  -review_id: int
+class Review {
+  -text: string
   -rating: int
-  -comment: string
-  -user_id: int
-  -place_id: int
+  -user: User
+  -place: Place
 }
 
 %% Amenity
-class AmenityService {
-  +create(): void
-  +update(): void
-  +delete(): void
-  +list(): void
-  -amenity_id: int
+class Amenity {
   -name: string
-  -description: string
 }
 
-UserService "1" --> "many" PlaceService : owns
-UserService "1" --> "many" ReviewService : writes
-PlaceService "1" --> "many" ReviewService : has
-PlaceService "many" <--> "many" AmenityService : includes
+%% Inheritance
+User --|> BaseModel
+Place --|> BaseModel
+Review --|> BaseModel
+Amenity --|> BaseModel
+
+%% Relationships
+User "1" --> "many" Place : owns
+User "1" --> "many" Review : writes
+Place "1" --> "many" Review : has
+Place "many" --> "many" Amenity : includes
