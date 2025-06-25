@@ -1,8 +1,8 @@
 from app.models.base_model import BaseModel
 
 class Review(BaseModel):
-    def init(self, text, rating, place, user):
-        super().init()
+    def __init__(self, text, rating, place, user):
+        super().__init__()
         if not text:
             raise ValueError("Review text is required")
         if not (1 <= rating <= 5):
@@ -10,5 +10,6 @@ class Review(BaseModel):
 
         self.text = text
         self.rating = rating
-        self.place = place
-        self.user  =  user
+        self.place = place  # Expected to be a Place object or place ID
+        self.user = user    # Expected to be a User object or user ID
+
