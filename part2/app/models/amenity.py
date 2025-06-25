@@ -1,11 +1,9 @@
-
-
 from app.models.base_model import BaseModel
 
 class Amenity(BaseModel):
-    def init(self, name):
-        super().init()
-        if not name or len(name) > 50:
-            raise ValueError("Invalid amenity name")
+    def __init__(self, name):
+        super().__init__()
+        if not name or not isinstance(name, str):
+            raise ValueError("Amenity name must be a non-empty string")
         self.name = name
 
