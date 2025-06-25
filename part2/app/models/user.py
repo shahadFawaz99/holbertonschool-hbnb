@@ -1,17 +1,23 @@
-
 from app.models.base_model import BaseModel
+import re
 
 class User(BaseModel):
-    def init(self, first_name, last_name, email, is_admin=False):
-        super().init()
-        if not first_name or len(first_name) > 50:
-            raise ValueError("Invalid first name")
-        if not last_name or len(last_name) > 50:
-            raise ValueError("Invalid last name")
-        if not email or "@" not in email:
-            raise ValueError("Invalid email")
+    def __init__(self, first_name, last_name, email):
+        super().__init__()
+
+        if not first_name or not first_name.strip():
+            raise ValueError("First name is required")
+        if not last_name or not last_name.strip():
+            raise ValueError("Last name is required")
+        if not email or not self._is_valid_email(email):
+            raise ValueError("A valid email is required")
 
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.is_admin = is_admin
+
+    def _is_valid_email(self, email):
+        # Simple regex for validating an email address
+        pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        return re.match(pattern, email) is not None
+
