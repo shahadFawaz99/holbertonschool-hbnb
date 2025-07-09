@@ -3,12 +3,12 @@ from app.extensions import db, bcrypt, jwt
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
 
-def create_app():
+def create_app(config_class='config.DevelopmentConfig'):
     """Factory function to create the Flask application"""
     app = Flask(__name__)
 
     # Configuration
-    app.config.from_object('config.DevelopmentConfig')
+    app.config.from_object(config_class)
 
     # Initialisation des extensions
     db.init_app(app)
