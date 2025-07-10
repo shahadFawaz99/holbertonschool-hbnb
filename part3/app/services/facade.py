@@ -1,11 +1,15 @@
 from app.persistence.repository import InMemoryRepository
+from app.persistence.sqlalchemy_repository import SQLAlchemyRepository
 from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
-        self.user_repo = InMemoryRepository()
+        # ✅ User repository now uses SQLAlchemy
+        self.user_repo = SQLAlchemyRepository(User)
+
+        # ❗ Still using in-memory for Place and Review until Task 6
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
 

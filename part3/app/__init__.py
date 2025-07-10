@@ -1,21 +1,23 @@
 from flask import Flask
-from app.extensions import db, bcrypt, jwt
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
 
-def create_app(config_class='config.DevelopmentConfig'):
+from app.extensions import db, bcrypt, jwt
+from config import DevelopmentConfig  # تأكد من وجود الملف config.py
+
+def create_app(config_class=DevelopmentConfig):
     """Factory function to create the Flask application"""
     app = Flask(__name__)
 
-    # Configuration
+    # Load the configuration class
     app.config.from_object(config_class)
 
-    # Initialisation des extensions
+    # Initialize extensions
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
 
-    # Configuration Swagger UI
+    # Swagger UI configuration
     SWAGGER_URL = '/api/v1'
     API_URL = '/static/swagger.json'
 
@@ -27,14 +29,14 @@ def create_app(config_class='config.DevelopmentConfig'):
         }
     )
 
-    # Enregistrement du blueprint Swagger
+    # Register Swagger blueprint
     app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
-    # S'assurer que le dossier static existe
+    # Ensure the static folder exists
     if not os.path.exists(os.path.join(app.root_path, 'static')):
         os.makedirs(os.path.join(app.root_path, 'static'))
 
-    # Import et enregistrement de l'API
+    # Register the API
     from app.api.v1 import api as api_v1
     api_v1.init_app(app)
 
