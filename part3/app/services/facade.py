@@ -1,20 +1,35 @@
+from app.services.repositories.user_repository import UserRepository
 from app.persistence.repository import InMemoryRepository
-from app.persistence.sqlalchemy_repository import SQLAlchemyRepository
 from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
 
+
 class HBnBFacade:
     def __init__(self):
-        # ✅ User repository now uses SQLAlchemy
-        self.user_repo = SQLAlchemyRepository(User)
+        self.user_repo = UserRepository()
 
-        # ❗ Still using in-memory for Place and Review until Task 6
+        # These will be migrated to SQLAlchemy in later tasks
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
 
+    # -------------------- USERS --------------------
+
+    def create_user(self, user_data):
+        user = User(
+            first_name=user_data['first_name'],
+            last_name=user_data['last_name'],
+            email=user_data['email']
+        )
+        user.hash_password(user_data['password'])
+        self.user_repo.add(user)
+        return user
+
     def get_user(self, user_id):
         return self.user_repo.get(user_id)
+
+    def get_user_by_email(self, email):
+        return self.user_repo.get_user_by_email(email)
 
     def update_user(self, user_id, data):
         user = self.get_user(user_id)
@@ -24,8 +39,10 @@ class HBnBFacade:
             raise ValueError("Cannot update email or password")
         for key, value in data.items():
             setattr(user, key, value)
-        self.user_repo.save(user)
+        self.user_repo.update(user_id, data)
         return user
+
+    # -------------------- PLACES --------------------
 
     def get_place(self, place_id):
         return self.place_repo.get(place_id)
@@ -45,6 +62,8 @@ class HBnBFacade:
         self.place_repo.save(place)
         return place
 
+    # -------------------- REVIEWS --------------------
+
     def get_review(self, review_id):
         return self.review_repo.get(review_id)
 
@@ -55,7 +74,9 @@ class HBnBFacade:
             raise ValueError("Place not found")
         if place.owner_id == user_id:
             raise ValueError("Cannot review your own place")
-        existing_reviews = self.review_repo.find_by(lambda r: r.user_id == user_id and r.place_id == place_id)
+        existing_reviews = self.review_repo.find_by(
+            lambda r: r.user_id == user_id and r.place_id == place_id
+        )
         if existing_reviews:
             raise ValueError("You have already reviewed this place")
         review = Review(**review_data)
@@ -77,3 +98,4 @@ class HBnBFacade:
         if not review or review.user_id != user_id:
             raise PermissionError("Unauthorized action")
         self.review_repo.delete(review_id)
+
