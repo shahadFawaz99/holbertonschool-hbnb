@@ -1,3 +1,4 @@
+from flask_cors import CORS
 """
 REST API setup module.
 Handles configuration and registration of various endpoints.
