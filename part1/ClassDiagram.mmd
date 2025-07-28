@@ -1,0 +1,56 @@
+classDiagram
+%% BaseModel
+class BaseModel {
+  -id: UUID
+  -created_at: datetime
+  -updated_at: datetime
+  +save(): void
+  +update(data: dict): void
+}
+
+%% User
+class User {
+  -first_name: string
+  -last_name: string
+  -email: string
+  -is_admin: bool
+}
+
+%% Place
+class Place {
+  -title: string
+  -description: string
+  -price: float
+  -latitude: float
+  -longitude: float
+  -owner: User
+  -amenities: list[Amenity]
+  -reviews: list[Review]
+  +add_amenity(amenity: Amenity): void
+  +add_review(review: Review): void
+}
+
+%% Review
+class Review {
+  -text: string
+  -rating: int
+  -user: User
+  -place: Place
+}
+
+%% Amenity
+class Amenity {
+  -name: string
+}
+
+%% Inheritance
+User --|> BaseModel
+Place --|> BaseModel
+Review --|> BaseModel
+Amenity --|> BaseModel
+
+%% Relationships
+User "1" --> "many" Place : owns
+User "1" --> "many" Review : writes
+Place "1" --> "many" Review : has
+Place "many" --> "many" Amenity : includes

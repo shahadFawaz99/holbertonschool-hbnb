@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant User
+    participant API
+    participant BusinessLogic
+    participant Database
+
+    User->>API: POST /reviews
+    API->>BusinessLogic: validate_review(data)
+    BusinessLogic->>Database: save_review(data)
+    Database-->>BusinessLogic: review_id
+    BusinessLogic-->>API: return success
+    API-->>User: 201 Created + review info
