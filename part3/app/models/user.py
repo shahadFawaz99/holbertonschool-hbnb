@@ -1,5 +1,5 @@
 from app.extensions import db, bcrypt
-from app.models.base_model import BaseModel
+from app.models.BaseModel import BaseModel
 
 
 class User(BaseModel):
