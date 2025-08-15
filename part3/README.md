@@ -99,4 +99,8 @@ Visualizes:
 
 ## 🧑‍💻 Authors
 
-Abdullatif Alzaher, Donna Almadani.
+Shahad Aljahdali – @shahadFawaz99
+
+Donna Almadani – @donnasaud
+
+Munirah Faqihi – @MuFaqihi
