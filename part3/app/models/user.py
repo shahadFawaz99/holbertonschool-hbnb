@@ -1,25 +1,25 @@
-# app/models/user.py
-from app.extensions import db, bcrypt
-from .BaseModel import BaseModel 
+#!/usr/bin/python3
 
-class User(BaseModel):
-    __tablename__ = 'users'
+import uuid
+from datetime import datetime
+from app.extensions import db
 
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(120), nullable=False, unique=True)
-    password = db.Column(db.String(128), nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)
+class BaseModel(db.Model):
+    """Base class for all models."""
+    __abstract__ = True
 
-    places = db.relationship('Place', backref='owner', lazy=True)
-    reviews = db.relationship('Review', backref='author', lazy=True)
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def hash_password(self, password):
-        """Hash the password and store it."""
-        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+    def save(self):
+        """Save the instance to the database."""
+        db.session.add(self)
+        db.session.commit()
 
-    def verify_password(self, password):
-        """Verify the password against the stored hash."""
-        return bcrypt.check_password_hash(self.password, password)
-
-
+    def update(self, data):
+        """Update instance attributes from a dictionary."""
+        for key, value in data.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        self.save()
