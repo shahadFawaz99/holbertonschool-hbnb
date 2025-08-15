@@ -1,5 +1,6 @@
+# app/models/user.py
 from app.extensions import db, bcrypt
-from .BaseModel import BaseModel
+from .BaseModel import BaseModel 
 
 class User(BaseModel):
     __tablename__ = 'users'
@@ -14,8 +15,11 @@ class User(BaseModel):
     reviews = db.relationship('Review', backref='author', lazy=True)
 
     def hash_password(self, password):
+        """Hash the password and store it."""
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def verify_password(self, password):
+        """Verify the password against the stored hash."""
         return bcrypt.check_password_hash(self.password, password)
+
 
