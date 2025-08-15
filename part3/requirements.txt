@@ -1,4 +1,4 @@
-flask-bcrypt
-flask-jwt-extended
-sqlalchemy
-flask-sqlalchemy
+flask
+flask_sqlalchemy
+flask_bcrypt
+flask_jwt_extended
