@@ -1,7 +1,6 @@
 from app.extensions import db, bcrypt
 from .BaseModel import BaseModel
 
-
 class User(BaseModel):
     __tablename__ = 'users'
 
