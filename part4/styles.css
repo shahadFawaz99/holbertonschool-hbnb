@@ -1,1 +1,116 @@
+/* Reset & Base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #ff69b4; /* لون الهيدر بينك */
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between; /* اللوقو على اليسار، زر اللوقين على اليمين */
+    align-items: center;
+}
+
+.logo {
+    height: 50px; /* حجم اللوقو */
+}
+
+nav a.login-button {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 15px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+nav a.login-button:hover {
+    background-color: #fff;
+    color: #ff69b4;
+}
+
+/* Main Content */
+main {
+    padding: 20px;
+}
+
+/* Place & Review Cards */
+.place-card, .review-card {
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Buttons */
+button {
+    background-color: #ff69b4;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ff1493;
+}
+
+/* Forms */
+form {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input, form textarea, form select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #ff69b4;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+    }
+
+    nav a.login-button {
+        margin-top: 10px;
+    }
+}
 
