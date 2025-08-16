@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Place Details</title>
+    <title>List of Places</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,46 +17,42 @@
 
     <!-- Main Content -->
     <main>
-        <!-- Place Details -->
-        <section id="place-details" class="place-details">
-            <h2>Cozy Apartment</h2>
-            <p>Host: John Doe</p>
-            <p>Price: $100 / night</p>
-            <p>Description: A cozy apartment in the city center, close to all attractions.</p>
-            <p>Amenities: Wi-Fi, Kitchen, Air Conditioning</p>
+        <!-- Filter Section -->
+        <section id="filter">
+            <label for="price-filter">Max Price:</label>
+            <select id="price-filter">
+                <option value="50">$50</option>
+                <option value="100">$100</option>
+                <option value="200">$200</option>
+                <option value="500">$500</option>
+            </select>
         </section>
 
-        <!-- Reviews -->
-        <section id="reviews">
-            <h3>Reviews</h3>
-            <div class="review-card">
-                <p><strong>Alice</strong> (Rating: 5/5)</p>
-                <p>Great place! Very comfortable and clean.</p>
+        <!-- Places List -->
+        <section id="places-list">
+            <div class="place-card">
+                <h3>Cozy Apartment</h3>
+                <p>Price: $100 / night</p>
+                <a href="place.html" class="details-button">View Details</a>
             </div>
-            <div class="review-card">
-                <p><strong>Bob</strong> (Rating: 4/5)</p>
-                <p>Nice location, but a bit noisy at night.</p>
+
+            <div class="place-card">
+                <h3>Beach House</h3>
+                <p>Price: $250 / night</p>
+                <a href="place.html" class="details-button">View Details</a>
             </div>
-        </section>
 
-        <!-- Add Review Form -->
-        <section id="add-review" class="add-review">
-            <h3>Add a Review</h3>
-            <form id="review-form" class="form">
-                <label for="review-text">Review:</label>
-                <textarea id="review-text" name="review-text" required></textarea>
+            <div class="place-card">
+                <h3>Mountain Cabin</h3>
+                <p>Price: $150 / night</p>
+                <a href="place.html" class="details-button">View Details</a>
+            </div>
 
-                <label for="rating">Rating:</label>
-                <select id="rating" name="rating" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-
-                <button type="submit">Submit</button>
-            </form>
+            <div class="place-card">
+                <h3>City Studio</h3>
+                <p>Price: $90 / night</p>
+                <a href="place.html" class="details-button">View Details</a>
+            </div>
         </section>
     </main>
 
@@ -68,3 +64,4 @@
     <script src="scripts.js"></script>
 </body>
 </html>
+
