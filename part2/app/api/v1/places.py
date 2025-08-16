@@ -1,46 +1,55 @@
-ifrom flask_restx import Namespace, Resource, fields
+from flask_restx import Namespace, Resource, fields
 from app.services import facade
 
 api = Namespace('places', description='Place operations')
 
-# Amenity model
-amenity_model = api.model('PlaceAmenity', {
+# Output models
+amenity_out = api.model('PlaceAmenity', {
     'id': fields.String(description='Amenity ID'),
     'name': fields.String(description='Name of the amenity')
 })
 
-# User model
-user_model = api.model('PlaceUser', {
+user_out = api.model('PlaceUser', {
     'id': fields.String(description='User ID'),
     'first_name': fields.String(description='First name of the owner'),
     'last_name': fields.String(description='Last name of the owner'),
     'email': fields.String(description='Email of the owner')
 })
 
-# Review model (added in Task 5)
-review_model = api.model('PlaceReview', {
+review_out = api.model('PlaceReview', {
     'id': fields.String(description='Review ID'),
     'text': fields.String(description='Text of the review'),
     'rating': fields.Integer(description='Rating of the place (1-5)'),
     'user_id': fields.String(description='ID of the user')
 })
 
-# Place model
-place_model = api.model('Place', {
+# Request model (input)
+place_input = api.model('PlaceInput', {
     'title': fields.String(required=True, description='Title of the place'),
     'description': fields.String(description='Description of the place'),
     'price': fields.Float(required=True, description='Price per night'),
     'latitude': fields.Float(required=True, description='Latitude of the place'),
     'longitude': fields.Float(required=True, description='Longitude of the place'),
     'owner_id': fields.String(required=True, description='ID of the owner'),
-    'owner': fields.Nested(user_model, description='Owner of the place'),
-    'amenities': fields.List(fields.Nested(amenity_model), description='List of amenities'),
-    'reviews': fields.List(fields.Nested(review_model), description='List of reviews')  # Added
+    'amenities': fields.List(fields.String, required=False, description="List of amenity IDs")
+})
+
+# Response model (output)
+place_output = api.model('PlaceOutput', {
+    'id': fields.String(description='Place ID'),
+    'title': fields.String(description='Title'),
+    'description': fields.String(description='Description'),
+    'price': fields.Float(description='Price per night'),
+    'latitude': fields.Float(description='Latitude'),
+    'longitude': fields.Float(description='Longitude'),
+    'owner': fields.Nested(user_out, description='Owner of the place'),
+    'amenities': fields.List(fields.Nested(amenity_out), description='List of amenities'),
+    'reviews': fields.List(fields.Nested(review_out), description='List of reviews')
 })
 
 @api.route('/')
 class PlaceList(Resource):
-    @api.expect(place_model)
+    @api.expect(place_input, validate=True)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
     def post(self):
@@ -56,7 +65,7 @@ class PlaceList(Resource):
     def get(self):
         """Retrieve a list of all places"""
         places = facade.get_all_places()
-        return [place.to_dict() for place in places], 200
+        return [p.to_dict() for p in places], 200
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
@@ -69,7 +78,7 @@ class PlaceResource(Resource):
             return place.to_dict(), 200
         return {'error': 'Place not found'}, 404
 
-    @api.expect(place_model)
+    @api.expect(place_input, validate=True)
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
     @api.response(400, 'Invalid input data')
