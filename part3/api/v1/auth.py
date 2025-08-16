@@ -1,22 +1,19 @@
-from flask_restx import Namespace, Resource, fields
+from flask import Blueprint, request, jsonify
+from app.models.user import User
+from app import db
 from flask_jwt_extended import create_access_token
-from app.services import facade  # واجهة للتعامل مع البيانات
 
-api = Namespace('auth', description='Authentication operations')
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-login_model = api.model('Login', {
-    'email': fields.String(required=True),
-    'password': fields.String(required=True)
-})
+@auth_bp.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    if not data or not data.get('email') or not data.get('password'):
+        return jsonify({'error': 'Email and password required'}), 400
 
-@api.route('/login')
-class Login(Resource):
-    @api.expect(login_model)
-    def post(self):
-        credentials = api.payload
-        user = facade.get_user_by_email(credentials['email'])
-        if not user or not user.verify_password(credentials['password']):
-            return {'error': 'Invalid credentials'}, 401
+    user = User.query.filter_by(email=data['email']).first()
+    if not user or not user.check_password(data['password']):
+        return jsonify({'error': 'Invalid credentials'}), 401
 
-        access_token = create_access_token(identity={'id': str(user.id), 'is_admin': user.is_admin})
-        return {'access_token': access_token}, 200
+    token = create_access_token(identity={'id': user.id, 'is_admin': user.is_admin})
+    return jsonify({'access_token': token}), 200
