@@ -160,6 +160,6 @@ By completing this part, you will have:
 ## 👨‍💻 Authors
 Shahad Aljahdali – @shahadFawaz99
 
-Donna Almadani – @donnasaud
+Donna Saud – @donnasaud
 
 Munirah Faqihi – @MuFaqihi
